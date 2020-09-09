@@ -1,14 +1,82 @@
-var map = L.map('mapid',{editable: true}).setView([53.392603, -7.893307], 7);
-var masterLayer = {};
-var rectangle = {};
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29ubm9sbHlnbGVuOTMiLCJhIjoiY2p6ODZxbng0MGl3NTNmbnl6b3dleWVhbCJ9.0mJQQZufz3WkWIDaU7gi2g', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox.streets',
-}).addTo(map);
+let map = L.map('mapid',{editable: true}).setView([53.392603, -7.893307], 7);
+let masterLayer = {};
+let rectangle = {};
+let lassoedLayers = [];
+
+const getTileLayer = (id = 'streets') => {
+    return L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29ubm9sbHlnbGVuOTMiLCJhIjoiY2p6ODZxbng0MGl3NTNmbnl6b3dleWVhbCJ9.0mJQQZufz3WkWIDaU7gi2g', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: `mapbox.${id}`,
+        useCache: true,
+        crossOrigin: true
+    })
+};
+
+getTileLayer().addTo(map);
 
 const uploadFormEl = document.getElementById('uploadForm'),
     colorSelect = document.getElementById('colorSelection');
+
+const validateFileUpload = () => {
+    let fileEl = $('#geoJsonFile');
+    let file = fileEl[0].files[0];
+
+    if (file.size > 1024 * 1024) {
+        alert('Max upload size is 1MB');
+        fileEl.val('');
+    }
+
+    if (file.type !== 'application/json') {
+        alert('File must be of type JSON');
+        fileEl.val('');
+    }
+};
+
+$('#geoJsonFile').on('change', validateFileUpload);
+
+const retrieveGeoJson = async () => {
+    try {
+        let response = await fetch(`/api/getMapData.php`);
+        return await response.json();
+    }catch(err){
+        console.error(err);
+    }
+};
+
+const drawGeoJsonLayer = (geoJsonData) => {
+    if(typeof geoJsonData === 'object' && geoJsonData.hasOwnProperty('type')) {
+        let geoJsonLayer = L.geoJSON(geoJsonData, {
+            pointToLayer: function (feature, latlng) {
+                let marker = L.marker(latlng, {icon: getIcon()});
+                marker.bindPopup(generatePointDetails(feature), {
+                    maxWidth: "auto"
+                });
+                return marker;
+            }
+        });
+        geoJsonLayer.addTo(map);
+        masterLayer = geoJsonLayer;
+        map.fitBounds(geoJsonLayer.getBounds());
+    }
+};
+
+const reducePropertyToRow = (acc, property) => {
+    let propertyName = property[0].toUpperCase()[0] + property[0].substring(1);
+    return `${acc}<tr><td align="left"><b>${propertyName}:</b></td><td align="left">${property[1]}</td></tr>`
+};
+
+const generatePointDetails = (point) => {
+    return `
+            <div>
+                <h2>Details</h2>
+                <div>
+                    <table border="0">
+                        ${Object.entries(point.properties).reduce(reducePropertyToRow, '')}
+                    </table>
+                </div>
+            </div>`;
+};
 
 const getMarkerHtml = (color) => {
     return `
@@ -24,28 +92,43 @@ const getMarkerHtml = (color) => {
     `;
 };
 
-function getIcon(color = 'blue'){
+const getIcon = (color = 'blue') => {
     return L.divIcon({
         className: "marker",
         html: `<span style="${getMarkerHtml(color)}" />`,
         popupAnchor: [-7, -20]
     });
-}
+};
 
-$('#geoJsonFile').on('change', () => {
-    let fileEl = $('#geoJsonFile');
-    let file = fileEl[0].files[0];
-
-    if (file.size > 1024 * 1024) {
-        alert('Max upload size is 1MB');
-        fileEl.val('');
-    }
-
-    if (file.type !== 'application/json') {
-        alert('File must be of type JSON');
-        fileEl.val('');
-    }
-});
+const uploadGeoJson = () => {
+    $.ajax({
+        url: '/api/geoJsonUpload.php',
+        type: 'POST',
+        data: new FormData($('#geoJsonForm')[0]),
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: async () => {
+            resetView();
+            drawGeoJsonLayer(await retrieveGeoJson());
+        },
+        error: function (data) {
+            console.error(data);
+            try{
+                let parsedData = JSON.parse(data.responseText);
+                if(parsedData.hasOwnProperty('message')){
+                    alert(parsedData.message);
+                }
+            }catch (e) {
+                console.error(e);
+            }
+        },
+        complete: function () {
+            toggleUploadForm();
+            removeRectangle();
+        }
+    });
+};
 
 map.on('editable:vertex:dragend', (e) => {
     let rectBounds = e.layer.getBounds();
@@ -65,6 +148,7 @@ const removeRectangle = () => {
   if( typeof rectangle.remove === "function" ){
         rectangle.remove();
         rectangle = {};
+        lassoedLayers = [];
   }
 };
 
@@ -101,8 +185,9 @@ const buildMarkersTable = async (layers) => {
 
 const zoomToGeometry = (rowEl) => {
     let coords = JSON.parse(rowEl.getAttribute('feature'));
-    // masterLayer.getLayer(coords[2]).openPopup([coords[1], coords[0]]);
-    map.flyTo([coords[1], coords[0]], 16);
+    // let layer = masterLayer.getLayer(coords[2]);
+    // layer.togglePopup();
+    map.setView([coords[1], coords[0]], 16)
 };
 
 const reduceLayerToRow = (acc, layer) => {
@@ -139,16 +224,7 @@ const getMarkerTableHead = () => {
     `;
 };
 
-const retrieveGeoJson = async () => {
-    try {
-        let response = await fetch(`/api/getMapData.php`);
-        return await response.json();
-    }catch(err){
-        console.error(err);
-    }
-};
-
-function removeGeoJsonLayer(){
+const removeGeoJsonLayer = () => {
     if(typeof masterLayer.eachLayer !== 'function'){
         return;
     }
@@ -158,77 +234,15 @@ function removeGeoJsonLayer(){
         }
     });
     masterLayer = {};
-}
-
-const reducePropertyToRow = (acc, property) => {
-    let propertyName = property[0].toUpperCase()[0] + property[0].substring(1);
-    return `${acc}<tr><td align="left"><b>${propertyName}:</b></td><td align="left">${property[1]}</td></tr>`
 };
 
-const generatePointDetails = (point) => {
-    return `
-            <div>
-                <h2>Details</h2>
-                <div>
-                    <table border="0">
-                        ${Object.entries(point.properties).reduce(reducePropertyToRow, '')}
-                    </table>
-                </div>
-            </div>`;
-};
-
-function drawGeoJsonLayer(geoJsonData) {
+const resetView = () => {
     removeGeoJsonLayer();
-    if(typeof geoJsonData === 'object') {
-        let geoJsonLayer = L.geoJSON(geoJsonData, {
-            pointToLayer: function (feature, latlng) {
-                let marker = L.marker(latlng, {icon: getIcon()});
-                marker.bindPopup(generatePointDetails(feature), {
-                    maxWidth: "auto"
-                });
-                return marker;
-            }
-        });
-        geoJsonLayer.addTo(map);
-        masterLayer = geoJsonLayer;
-        map.fitBounds(geoJsonLayer.getBounds());
-    }
-}
+    removeRectangle();
+    removeMarkersTable();
+};
 
-(async () => {
-    drawGeoJsonLayer(await retrieveGeoJson());
-})();
-
-function uploadGeoJson() {
-    $.ajax({
-        // Your server script to process the upload
-        url: '/api/geoJsonUpload.php',
-        type: 'POST',
-
-        // Form data
-        data: new FormData($('#geoJsonForm')[0]),
-
-        // Tell jQuery not to process data or worry about content-type
-        // You *must* include these options!
-        cache: false,
-        contentType: false,
-        processData: false,
-
-        // Custom XMLHttpRequest
-        success: async () => {
-            drawGeoJsonLayer(await retrieveGeoJson());
-        },
-        error: function (data) {
-            console.error(data);
-        },
-        complete: function () {
-            toggleUploadForm();
-            removeRectangle();
-        }
-    });
-}
-
-function changeColor(selection){
+const changeAllColor = (selection) => {
     let color = selection.value;
     masterLayer.eachLayer(function(layer) {
         if(typeof layer.setIcon === 'function') {
@@ -238,23 +252,40 @@ function changeColor(selection){
             layer.setStyle({color: color});
         }
     });
-}
+};
 
-function toggleColorSelection(){
+const changeSelectedColor = (selection) => {
+    let color = selection.value;
+
+    if(typeof rectangle.getBounds === 'function') {
+
+        let rectBounds = rectangle.getBounds();
+
+        masterLayer.eachLayer(function (layer) {
+            if (layer instanceof L.Marker && rectBounds.contains(layer.getLatLng())) {
+                if (typeof layer.setIcon === 'function') {
+                    layer.setIcon(getIcon(color));
+                }
+            }
+        });
+    }
+};
+
+const toggleColorSelection = () => {
     if (colorSelect.style.display !== 'none') {
         colorSelect.style.display = 'none';
     } else {
         colorSelect.style.display = 'block';
     }
-}
+};
 
-function toggleUploadForm() {
+const toggleUploadForm = () => {
     if (uploadFormEl.style.display !== 'none') {
         uploadFormEl.style.display = 'none';
     } else {
         uploadFormEl.style.display = 'block';
     }
-}
+};
 
 (async () => {
     let topRightDiv = L.control({position: "topright"});
@@ -332,3 +363,7 @@ function dragElement(elmnt) {
         document.onmousemove = null;
     }
 };
+
+(async () => {
+    drawGeoJsonLayer(await retrieveGeoJson());
+})();

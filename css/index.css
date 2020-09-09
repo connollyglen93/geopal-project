@@ -88,6 +88,10 @@ legend {
     padding: 2px 2px;
 }
 
+.smUploadBtn {
+    width: 33.333%;
+}
+
 .marker-table {
     letter-spacing: normal;
     word-spacing: normal;

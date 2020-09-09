@@ -7,7 +7,7 @@
  */
 
 function writeLog($message){
-    $logfile = "log/" . date('Y_m_d') . ".txt";
+    $logfile = "../log/" . date('Y_m_d') . ".txt";
 
     $handle = fopen($logfile, 'a');
 

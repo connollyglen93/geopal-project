@@ -46,8 +46,9 @@ header("Content-Type: text/html; charset=UTF-8");
                     <option value="#800080">Purple</option>
                     <option value="#FFC0CB">Pink</option>
                 </select>
-                <button type="button" class="uploadBtn" onclick="changeColor(document.getElementById('colorSelect'))">Change</button>
-                <button type="button" class="uploadBtn" onclick="toggleColorSelection()">Cancel</button>
+                <button type="button" class="uploadBtn smUploadBtn" onclick="changeAllColor(document.getElementById('colorSelect'))">Change All</button>
+                <button type="button" class="uploadBtn smUploadBtn" onclick="changeSelectedColor(document.getElementById('colorSelect'))">Change Selected</button>
+                <button type="button" class="uploadBtn smUploadBtn" onclick="toggleColorSelection()">Cancel</button>
             </fieldset>
     </div>
 </body>

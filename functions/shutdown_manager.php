@@ -8,13 +8,13 @@
 
 ini_set('display_errors', '1');
 
-set_error_handler(function(){
+//PHP 5 error handling
+set_error_handler(function () {
     $error = error_get_last();
-    if($error !== NULL){
+    if ($error !== NULL) {
 
-        $info = "[SHUTDOWN] file:".$error['file']." | ln:".$error['line']." | msg:".$error['message'] .PHP_EOL;
+        $info = "[SHUTDOWN] file:" . $error['file'] . " | ln:" . $error['line'] . " | msg:" . $error['message'] . PHP_EOL;
 
         writeLog($info);
-
     }
 });
