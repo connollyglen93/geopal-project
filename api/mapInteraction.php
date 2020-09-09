@@ -7,6 +7,7 @@
  */
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset=UTF-8");
+
 ?>
 <div id="map-interaction-buttons">
     <button type="button" onclick="toggleUploadForm()">Upload GeoJson File</button>

@@ -7,6 +7,7 @@
  */
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset=UTF-8");
+http_response_code(200);
 ?>
 <!DOCTYPE html>
 <html>
