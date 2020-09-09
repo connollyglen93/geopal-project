@@ -244,14 +244,16 @@ const resetView = () => {
 
 const changeAllColor = (selection) => {
     let color = selection.value;
-    masterLayer.eachLayer(function(layer) {
-        if(typeof layer.setIcon === 'function') {
-            layer.setIcon(getIcon(color));
-        }else{
-            //Compatibility for FeatureCollection, Polygon or MultiPolygon GeoJSON
-            layer.setStyle({color: color});
-        }
-    });
+    if(typeof masterLayer.eachLayer === 'function') {
+        masterLayer.eachLayer(function (layer) {
+            if (typeof layer.setIcon === 'function') {
+                layer.setIcon(getIcon(color));
+            } else {
+                //Compatibility for FeatureCollection, Polygon or MultiPolygon GeoJSON
+                layer.setStyle({color: color});
+            }
+        });
+    }
 };
 
 const changeSelectedColor = (selection) => {
