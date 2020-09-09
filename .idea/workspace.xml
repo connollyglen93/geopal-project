@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="89b86acd-bc46-4d95-a5a9-46ece4d56b34" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/getMapData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GeoJsonFileUploader.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/GeoJsonFileUploader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UploadException.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/UploadException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geoJsonUpload.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/geoJsonUpload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getMapData.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logging.php" beforeDir="false" afterPath="$PROJECT_DIR$/functions/logging.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mapInteraction.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/mapInteraction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restart.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/restart.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shutdown_manager.php" beforeDir="false" afterPath="$PROJECT_DIR$/functions/shutdown_manager.php" afterDir="false" />
-    </list>
+    <list default="true" id="89b86acd-bc46-4d95-a5a9-46ece4d56b34" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,11 +11,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="104" column="4" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="4" />
+            <state relative-caret-position="1785">
+              <caret line="105" column="2" lean-forward="true" selection-start-line="105" selection-start-column="2" selection-end-line="105" selection-end-column="2" />
               <folding>
                 <element signature="e#9#15#0" expanded="true" />
                 <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#!!top" expanded="true" />
@@ -52,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="getMapData.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="getMapData.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/getMapData.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="15" column="49" lean-forward="true" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
+            <state relative-caret-position="187">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
@@ -125,7 +108,7 @@
       <file leaf-file-name="GeoJsonFileUploader.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/GeoJsonFileUploader.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
+            <state relative-caret-position="374">
               <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
               <folding>
                 <element signature="e#6#95#0#PHP" expanded="true" />
@@ -350,12 +333,12 @@
       <workItem from="1599402387520" duration="14377000" />
       <workItem from="1599491473991" duration="7273000" />
       <workItem from="1599591227375" duration="8049000" />
-      <workItem from="1599664818617" duration="3876000" />
+      <workItem from="1599664818617" duration="4452000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33575000" />
+    <option name="totallyTimeSpent" value="34151000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-311" width="1936" height="1056" extended-state="6" />
@@ -368,7 +351,7 @@
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25799572" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25799572" />
       <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -650,16 +633,6 @@
     <entry file="file://$PROJECT_DIR$/api/geopal_geojson_15f58f7091622b.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/GeoJsonFileUploader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-          <folding>
-            <element signature="e#6#95#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api/restart.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -702,13 +675,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/getMapData.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="15" column="49" lean-forward="true" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/leaflet/leaflet-src.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="859">
@@ -718,14 +684,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="104" column="4" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="4" />
+        <state relative-caret-position="1785">
+          <caret line="105" column="2" lean-forward="true" selection-start-line="105" selection-start-column="2" selection-end-line="105" selection-end-column="2" />
           <folding>
             <element signature="e#9#15#0" expanded="true" />
             <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/GeoJsonFileUploader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding>
+            <element signature="e#6#95#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/getMapData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
