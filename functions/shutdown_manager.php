@@ -5,7 +5,8 @@
  * Date: 07/09/2020
  * Time: 19:00
  */
-include_once 'logging.php';
+
+ini_set('display_errors', '1');
 
 set_error_handler(function(){
     $error = error_get_last();

@@ -5,8 +5,9 @@
  * Date: 06/09/2020
  * Time: 16:39
  */
+namespace classes;
 
-class UploadException extends Exception
+class UploadException extends \Exception
 {
 
 }

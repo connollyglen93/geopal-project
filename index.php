@@ -5,13 +5,15 @@
  * Date: 07/09/2020
  * Time: 15:28
  */
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: text/html; charset=UTF-8");
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>GeoPal</title>
     <link rel="stylesheet" href="/leaflet/leaflet.css"/>
-    <link rel="stylesheet" href="/index.css"/>
+    <link rel="stylesheet" href="/css/index.css"/>
 
     <script src="/jquery/jquery-3.5.1.min.js"></script>
     <script src="/leaflet/leaflet.js"></script>
@@ -49,5 +51,5 @@
             </fieldset>
     </div>
 </body>
-    <script src="/index.js"></script>
+    <script src="/js/index.js"></script>
 </html>

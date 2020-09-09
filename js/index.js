@@ -7,8 +7,8 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets',
 }).addTo(map);
 
-const uploadFormEl = document.getElementById('uploadForm');
-const colorSelect = document.getElementById('colorSelection');
+const uploadFormEl = document.getElementById('uploadForm'),
+    colorSelect = document.getElementById('colorSelection');
 
 const getMarkerHtml = (color) => {
     return `
@@ -27,22 +27,14 @@ const getMarkerHtml = (color) => {
 function getIcon(color = 'blue'){
     return L.divIcon({
         className: "marker",
-        // iconSize: [15, 45],
-        // iconAnchor: [0, 6],
-        // labelAnchor: [-6, 0],
-        // popupAnchor: [0, -18],
-        html: `<span style="${getMarkerHtml(color)}" />`
+        html: `<span style="${getMarkerHtml(color)}" />`,
+        popupAnchor: [-7, -20]
     });
 }
 
 $('#geoJsonFile').on('change', () => {
     let fileEl = $('#geoJsonFile');
     let file = fileEl[0].files[0];
-
-    // if(!file.hasOwnProperty('size') || !file.hasOwnProperty('type')){
-    //     alert('File not provided');
-    //     fileEl.val('');
-    // }
 
     if (file.size > 1024 * 1024) {
         alert('Max upload size is 1MB');
@@ -107,10 +99,18 @@ const buildMarkersTable = async (layers) => {
     botLeftDiv.addTo(map);
 };
 
+const zoomToGeometry = (rowEl) => {
+    let coords = JSON.parse(rowEl.getAttribute('feature'));
+    // masterLayer.getLayer(coords[2]).openPopup([coords[1], coords[0]]);
+    map.flyTo([coords[1], coords[0]], 16);
+};
+
 const reduceLayerToRow = (acc, layer) => {
     let address = layer.feature.properties.hasOwnProperty('address') ? layer.feature.properties.address : 'Unknown';
+    layer.feature.geometry.coordinates.push(layer._leaflet_id);
+    let jsonCoords = JSON.stringify(layer.feature.geometry.coordinates);
     return acc + `
-        <tr>
+        <tr onclick="zoomToGeometry(this)" feature="${jsonCoords}">
             <td>${address}</td>
             <td>${layer.feature.geometry.coordinates[1]}</td>
             <td>${layer.feature.geometry.coordinates[0]}</td>
@@ -140,8 +140,12 @@ const getMarkerTableHead = () => {
 };
 
 const retrieveGeoJson = async () => {
-    let response = await fetch(`/getMapData.php`);
-    return await response.json();
+    try {
+        let response = await fetch(`/api/getMapData.php`);
+        return await response.json();
+    }catch(err){
+        console.error(err);
+    }
 };
 
 function removeGeoJsonLayer(){
@@ -198,7 +202,7 @@ function drawGeoJsonLayer(geoJsonData) {
 function uploadGeoJson() {
     $.ajax({
         // Your server script to process the upload
-        url: 'geoJsonUpload.php',
+        url: '/api/geoJsonUpload.php',
         type: 'POST',
 
         // Form data
@@ -255,7 +259,7 @@ function toggleUploadForm() {
 (async () => {
     let topRightDiv = L.control({position: "topright"});
 
-    fetch('/mapInteraction.php')
+    fetch('/api/mapInteraction.php')
         .then((response) => {
             return response.text();
         })
@@ -270,8 +274,6 @@ function toggleUploadForm() {
 })();
 
 let fileInput = document.querySelector('#geoJsonFile');
-let label	 = fileInput.nextElementSibling,
-    labelVal = label.innerHTML;
 
 fileInput.addEventListener('change', (e) => {
     let label	 = fileInput.nextElementSibling,
@@ -292,7 +294,7 @@ for (var i = 0; i < draggableElements.length; i++) {
 function dragElement(elmnt) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "Header")) {
-        // if present, the header is where you move the DIV from:
+        // if present, the Header is where you move the DIV from:
         document.getElementById(elmnt.id + "Header").onmousedown = dragMouseDown;
     } else {
         // otherwise, move the DIV from anywhere inside the DIV:
@@ -303,23 +305,23 @@ function dragElement(elmnt) {
     function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
-        // get the mouse cursor position at startup:
+        // get the mouse cursor position
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
+        // call the drag function whenever the cursor moves:
         document.onmousemove = elementDrag;
     }
 
     function elementDrag(e) {
         e = e || window.event;
         e.preventDefault();
-        // calculate the new cursor position:
+        // calculate the new cursor position
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        // set the element's new position:
+        // set the element's new position
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }

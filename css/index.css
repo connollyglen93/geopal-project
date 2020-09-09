@@ -132,10 +132,18 @@ legend {
 .marker-table tr {
     background-color: #FFFFFF;
 }
-
+.marker-table tr:hover {
+    background-color: #aeaeaf;
+    cursor: pointer;
+}
 .marker-table tr:nth-child(even) {
     background-color: #d3d3d3;
 }
+.marker-table tr:nth-child(even):hover {
+    background-color: #aeaeaf;
+    cursor: pointer;
+}
+
 label[for=colorSelect]{
     float: left;
 }

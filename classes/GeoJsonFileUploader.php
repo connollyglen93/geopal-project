@@ -5,8 +5,8 @@
  * Date: 06/09/2020
  * Time: 16:35
  */
-
-include_once 'logging.php';
+namespace classes;
+include_once '../functions/logging.php';
 
 class GeoJsonFileUploader
 {
